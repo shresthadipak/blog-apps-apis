@@ -1,6 +1,7 @@
 package com.apps.blog.services.impl;
 
 import com.apps.blog.entities.User;
+import com.apps.blog.exceptions.ResourceBadRequestException;
 import com.apps.blog.exceptions.ResourceNotFoundException;
 import com.apps.blog.payloads.UserDto;
 import com.apps.blog.repositories.UserRepo;
@@ -26,6 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, Integer userId) {
+        try {
+            Integer.parseInt(String.valueOf(userId));
+        }catch (Exception ex) {
+            throw new ResourceBadRequestException("User", "id", userId);
+        }
+
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
@@ -34,6 +41,7 @@ public class UserServiceImpl implements UserService {
         User updateSave = this.userRepo.save(user);
         UserDto userDto1 = this.userToDto(updateSave);
         return userDto1;
+
     }
 
     @Override
