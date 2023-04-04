@@ -1,7 +1,6 @@
 package com.apps.blog.services.impl;
 
 import com.apps.blog.entities.User;
-import com.apps.blog.exceptions.ResourceBadRequestException;
 import com.apps.blog.exceptions.ResourceNotFoundException;
 import com.apps.blog.payloads.UserDto;
 import com.apps.blog.repositories.UserRepo;
