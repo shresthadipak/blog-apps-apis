@@ -1,6 +1,7 @@
 package com.apps.blog.controllers;
 
 import com.apps.blog.entities.Post;
+import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.PostDto;
 import com.apps.blog.repositories.PostRepo;
 import com.apps.blog.services.PostService;
@@ -51,4 +52,19 @@ public class PostController {
         PostDto postDto = this.postService.getPostById(postId);
         return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
     }
+
+    // update the post
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
+        PostDto updatePost = this.postService.updatePost(postDto, postId);
+        return ResponseEntity.ok(updatePost);
+    }
+
+    // delete the post
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<?> deletePost(@PathVariable Integer postId){
+        this.postService.deletePost(postId);
+        return new ResponseEntity<ApiResponse>(new ApiResponse("Post is successfully deleted!!", true, 200), HttpStatus.OK);
+    }
+
 }
