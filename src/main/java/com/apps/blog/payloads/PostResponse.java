@@ -13,6 +13,8 @@ public class PostResponse {
     private List<PostDto> content;
     private Integer pageNumber;
     private Integer pageSize;
+    private String sortBy;
+    private String sortOrder;
     private Long totalElements;
     private Integer totalPages;
     private boolean firstPage;

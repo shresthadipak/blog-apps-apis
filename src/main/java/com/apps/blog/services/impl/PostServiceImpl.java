@@ -11,10 +11,12 @@ import com.apps.blog.repositories.PostRepo;
 import com.apps.blog.repositories.UserRepo;
 import com.apps.blog.services.PostService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -68,8 +70,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
-        Pageable p = PageRequest.of(pageNumber, pageSize);
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        Sort sort = (sortOrder.equalsIgnoreCase("asc"))? (Sort.by(sortBy).ascending()): (Sort.by(sortBy).descending());
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> pagePost = this.postRepo.findAll(p);
         List<Post> allPosts = pagePost.getContent();
         List<PostDto> postDtos = allPosts.stream().map((post)-> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
@@ -78,6 +83,8 @@ public class PostServiceImpl implements PostService {
         postResponse.setContent(postDtos);
         postResponse.setPageNumber(pagePost.getNumber());
         postResponse.setPageSize(pagePost.getSize());
+        postResponse.setSortBy(sortBy);
+        postResponse.setSortBy(sortOrder);
         postResponse.setTotalElements(pagePost.getTotalElements());
         postResponse.setTotalPages(pagePost.getTotalPages());
         postResponse.setFirstPage(pagePost.isFirst());
