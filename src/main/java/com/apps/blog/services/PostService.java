@@ -2,6 +2,7 @@ package com.apps.blog.services;
 
 import com.apps.blog.entities.Post;
 import com.apps.blog.payloads.PostDto;
+import com.apps.blog.payloads.PostResponse;
 
 import java.util.List;
 
@@ -11,13 +12,13 @@ public interface PostService {
     PostDto createPost(PostDto postDto, Integer userId, Integer categoryId);
 
     // update
-    PostDto updatePost(PostDto postDto, Integer postId);
+    PostDto updatePost(PostDto postDto, Integer postId, Integer categoryId);
 
     // delete
     void deletePost(Integer postId);
 
     // get all posts
-    List<PostDto> getAllPost();
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
 
     // get single post
     PostDto getPostById(Integer postId);

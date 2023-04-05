@@ -3,6 +3,7 @@ package com.apps.blog.controllers;
 import com.apps.blog.entities.Post;
 import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.PostDto;
+import com.apps.blog.payloads.PostResponse;
 import com.apps.blog.repositories.PostRepo;
 import com.apps.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,14 @@ public class PostController {
 
     // get all post
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        List<PostDto> posts = this.postService.getAllPost();
-        return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPost(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
+            ){
+
+        PostResponse allPosts = this.postService.getAllPost(pageNumber, pageSize);
+        return new ResponseEntity<PostResponse>(allPosts, HttpStatus.OK);
+
     }
 
     // get single post
@@ -54,9 +60,9 @@ public class PostController {
     }
 
     // update the post
-    @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId){
-        PostDto updatePost = this.postService.updatePost(postDto, postId);
+    @PutMapping("/category/{categoryId}/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId, @PathVariable Integer categoryId){
+        PostDto updatePost = this.postService.updatePost(postDto, postId, categoryId);
         return ResponseEntity.ok(updatePost);
     }
 
