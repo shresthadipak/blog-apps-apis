@@ -2,6 +2,7 @@ package com.apps.blog.controllers;
 
 import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.UserDto;
+import com.apps.blog.payloads.UserResponse;
 import com.apps.blog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,13 @@ public class UserController {
     }
     //GET-user get
     @GetMapping("/")
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        return ResponseEntity.ok(this.userService.getAllUsers());
+    public ResponseEntity<UserResponse> getAllUsers(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder
+    ){
+        return ResponseEntity.ok(this.userService.getAllUsers(pageNumber, pageSize, sortBy, sortOrder));
     }
 
     @GetMapping("/{userId}")

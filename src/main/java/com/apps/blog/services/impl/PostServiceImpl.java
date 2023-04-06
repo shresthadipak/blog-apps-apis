@@ -84,7 +84,7 @@ public class PostServiceImpl implements PostService {
         postResponse.setPageNumber(pagePost.getNumber());
         postResponse.setPageSize(pagePost.getSize());
         postResponse.setSortBy(sortBy);
-        postResponse.setSortBy(sortOrder);
+        postResponse.setSortOrder(sortOrder);
         postResponse.setTotalElements(pagePost.getTotalElements());
         postResponse.setTotalPages(pagePost.getTotalPages());
         postResponse.setFirstPage(pagePost.isFirst());

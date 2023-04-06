@@ -2,11 +2,17 @@ package com.apps.blog.services.impl;
 
 import com.apps.blog.entities.User;
 import com.apps.blog.exceptions.ResourceNotFoundException;
+import com.apps.blog.payloads.PostDto;
 import com.apps.blog.payloads.UserDto;
+import com.apps.blog.payloads.UserResponse;
 import com.apps.blog.repositories.UserRepo;
 import com.apps.blog.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,10 +54,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        List<User> users = this.userRepo.findAll();
-        List<UserDto> userDtos = users.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
-        return userDtos;
+    public UserResponse getAllUsers(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sort = (sortOrder.equalsIgnoreCase("asc"))? (Sort.by(sortBy).ascending()):(Sort.by(sortBy).descending());
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<User>  userPage= this.userRepo.findAll(p);
+        List<User> allUsers = userPage.getContent();
+        List<UserDto> userDtos = allUsers.stream().map(user -> this.modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setContent(userDtos);
+        userResponse.setPageNumber(userPage.getNumber());
+        userResponse.setPageSize(userPage.getSize());
+        userResponse.setSortBy(sortBy);
+        userResponse.setSortOrder(sortOrder);
+        userResponse.setTotalElements(userPage.getTotalElements());
+        userResponse.setTotalPages(userPage.getTotalPages());
+        userResponse.setFirstPage(userPage.isFirst());
+        userResponse.setLastPage(userPage.isLast());
+
+        return userResponse;
     }
 
     @Override
