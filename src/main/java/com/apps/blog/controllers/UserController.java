@@ -1,5 +1,6 @@
 package com.apps.blog.controllers;
 
+import com.apps.blog.config.AppConstants;
 import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.UserDto;
 import com.apps.blog.payloads.UserResponse;
@@ -40,10 +41,10 @@ public class UserController {
     //GET-user get
     @GetMapping("/")
     public ResponseEntity<UserResponse> getAllUsers(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "2", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY_USER, required = false) String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ){
         return ResponseEntity.ok(this.userService.getAllUsers(pageNumber, pageSize, sortBy, sortOrder));
     }

@@ -1,5 +1,6 @@
 package com.apps.blog.controllers;
 
+import com.apps.blog.config.AppConstants;
 import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.CategoryDto;
 import com.apps.blog.payloads.CategoryResponse;
@@ -39,10 +40,10 @@ public class CategoryController {
 
     @GetMapping("/")
     public ResponseEntity<CategoryResponse> getAllCategory(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "2", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "categoryId", required = false) String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY_CATEGORY, required = false) String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ){
         return ResponseEntity.ok(this.categoryService.getAllCategory(pageNumber, pageSize, sortBy, sortOrder));
     }

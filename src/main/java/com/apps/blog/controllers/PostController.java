@@ -1,5 +1,6 @@
 package com.apps.blog.controllers;
 
+import com.apps.blog.config.AppConstants;
 import com.apps.blog.entities.Post;
 import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.PostDto;
@@ -43,10 +44,10 @@ public class PostController {
     // get all post
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPost(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY_POST, required = false) String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
             ){
 
         PostResponse allPosts = this.postService.getAllPost(pageNumber, pageSize, sortBy, sortOrder);
@@ -77,7 +78,7 @@ public class PostController {
 
     @GetMapping("/posts/search")
     public ResponseEntity<List<PostDto>> searchPosts(
-            @RequestParam("keywords") String keywords
+            @RequestParam(value = "keywords", defaultValue = "", required = false) String keywords
     ){
         return ResponseEntity.ok(this.postService.searchPosts(keywords));
     }
