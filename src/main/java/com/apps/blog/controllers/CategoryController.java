@@ -2,6 +2,7 @@ package com.apps.blog.controllers;
 
 import com.apps.blog.payloads.ApiResponse;
 import com.apps.blog.payloads.CategoryDto;
+import com.apps.blog.payloads.CategoryResponse;
 import com.apps.blog.services.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,13 @@ public class CategoryController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<CategoryDto>> getAllCategory(){
-        return ResponseEntity.ok(this.categoryService.getAllCategory());
+    public ResponseEntity<CategoryResponse> getAllCategory(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "categoryId", required = false) String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder
+    ){
+        return ResponseEntity.ok(this.categoryService.getAllCategory(pageNumber, pageSize, sortBy, sortOrder));
     }
 
     @GetMapping("/{categoryId}")

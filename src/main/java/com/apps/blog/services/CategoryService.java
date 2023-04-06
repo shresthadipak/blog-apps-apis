@@ -1,6 +1,7 @@
 package com.apps.blog.services;
 
 import com.apps.blog.payloads.CategoryDto;
+import com.apps.blog.payloads.CategoryResponse;
 
 import java.util.List;
 
@@ -9,6 +10,6 @@ public interface CategoryService {
     CategoryDto updateCategory(CategoryDto categoryDto, Integer categoryId);
     void deleteCategory(Integer categoryId);
     CategoryDto getCategoryById(Integer categoryId);
-    List<CategoryDto> getAllCategory();
+    CategoryResponse getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
 }

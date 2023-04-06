@@ -3,10 +3,15 @@ package com.apps.blog.services.impl;
 import com.apps.blog.entities.Category;
 import com.apps.blog.exceptions.ResourceNotFoundException;
 import com.apps.blog.payloads.CategoryDto;
+import com.apps.blog.payloads.CategoryResponse;
 import com.apps.blog.repositories.CategoryRepo;
 import com.apps.blog.services.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,10 +54,27 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getAllCategory() {
-        List<Category> categories = this.categoryRepo.findAll();
-        List<CategoryDto> categoryDtos = categories.stream().map(category -> this.categoryToDto(category)).collect(Collectors.toList());
-        return categoryDtos;
+    public CategoryResponse getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        Sort sort = (sortOrder.equalsIgnoreCase("asc"))? (Sort.by(sortBy).ascending()):(Sort.by(sortBy).descending());
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Category> categoryPage = this.categoryRepo.findAll(p);
+        List<Category> allCategories = categoryPage.getContent();
+        List<CategoryDto> categoryDtos = allCategories.stream().map(category -> this.categoryToDto(category)).collect(Collectors.toList());
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setContent(categoryDtos);
+        categoryResponse.setPageNumber(categoryPage.getNumber());
+        categoryResponse.setPageSize(categoryPage.getSize());
+        categoryResponse.setSortBy(sortBy);
+        categoryResponse.setSortOrder(sortOrder);
+        categoryResponse.setTotalElements(categoryPage.getTotalElements());
+        categoryResponse.setTotalPages(categoryPage.getTotalPages());
+        categoryResponse.setFirstPage(categoryPage.isFirst());
+        categoryResponse.setLastPage(categoryPage.isLast());
+
+        return categoryResponse;
+
     }
 
     public Category dtoToCategory(CategoryDto categoryDto){
