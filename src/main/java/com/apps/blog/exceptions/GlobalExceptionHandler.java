@@ -6,9 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,13 +25,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiResponse> badRequestExceptionHandler(ResourceBadRequestException ex){
-        String message = ex.getMessage();
-        ApiResponse apiResponse = new ApiResponse(message, false, 400);
-        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgsNotValidException(MethodArgumentNotValidException ex){
         Map<String, String> resp = new HashMap<>();
@@ -38,5 +34,12 @@ public class GlobalExceptionHandler {
             resp.put(fieldName, message);
         });
         return new ResponseEntity<Map<String, String>>(resp, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ApiResponse> fileNotFoundExceptionHandler(IOException ex){
+        String message = ex.getMessage();
+        ApiResponse apiResponse = new ApiResponse("File not found", false, 404);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
 }

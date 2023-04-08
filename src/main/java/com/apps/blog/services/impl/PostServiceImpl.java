@@ -11,7 +11,6 @@ import com.apps.blog.repositories.PostRepo;
 import com.apps.blog.repositories.UserRepo;
 import com.apps.blog.services.PostService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -52,13 +51,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto updatePost(PostDto postDto, Integer postId, Integer categoryId) {
-        Category category = this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "category_id", categoryId));
+    public PostDto updatePost(PostDto postDto, Integer postId) {
         Post post = this.postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "post_id", postId));
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
         post.setImageName(postDto.getImageName());
-        post.setCategory(category);
         Post savePost = this.postRepo.save(post);
         return this.modelMapper.map(savePost, PostDto.class);
     }
