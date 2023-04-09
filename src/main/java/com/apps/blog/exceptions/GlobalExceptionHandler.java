@@ -1,16 +1,16 @@
 package com.apps.blog.exceptions;
 
 import com.apps.blog.payloads.ApiResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ApiResponse> fileNotFoundExceptionHandler(IOException ex){
         String message = ex.getMessage();
-        ApiResponse apiResponse = new ApiResponse("File not found", false, 404);
+        ApiResponse apiResponse = new ApiResponse(message, false, 404);
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
+
 }
