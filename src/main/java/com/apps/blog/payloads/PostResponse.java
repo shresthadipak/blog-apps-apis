@@ -1,5 +1,6 @@
 package com.apps.blog.payloads;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,4 +20,5 @@ public class PostResponse {
     private Integer totalPages;
     private boolean firstPage;
     private boolean lastPage;
+
 }
