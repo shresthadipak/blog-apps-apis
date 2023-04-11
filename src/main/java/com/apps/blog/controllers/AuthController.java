@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/api/v1/auth/")
 public class AuthController {
@@ -41,13 +42,13 @@ public class AuthController {
         return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
     }
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(String username, String password) throws Exception{
         UsernamePasswordAuthenticationToken authenticateToken= new UsernamePasswordAuthenticationToken(username, password);
-        try {
+
+        try{
             this.authenticationManager.authenticate(authenticateToken);
-        }catch (BadCredentialsException e){
-            System.out.println("Invalid details");
-            throw new Exception("Invalid username or password!");
+        }catch(BadCredentialsException ex){
+            throw new BadCredentialsException("Invalid username or password");
         }
     }
 }
