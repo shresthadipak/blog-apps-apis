@@ -2,7 +2,9 @@ package com.apps.blog.controllers;
 
 import com.apps.blog.payloads.JwtAuthRequest;
 import com.apps.blog.payloads.JwtAuthResponse;
+import com.apps.blog.payloads.UserDto;
 import com.apps.blog.security.JwtTokenHelper;
+import com.apps.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,9 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> createToken(
             @RequestBody JwtAuthRequest request
@@ -50,5 +55,12 @@ public class AuthController {
         }catch(BadCredentialsException ex){
             throw new BadCredentialsException("Invalid username or password");
         }
+    }
+
+    // register new user api
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+        UserDto  registeredUser = this.userService.registerNewUser(userDto);
+        return new ResponseEntity<UserDto>(registeredUser, HttpStatus.CREATED);
     }
 }
